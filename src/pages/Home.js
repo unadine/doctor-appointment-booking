@@ -9,6 +9,8 @@ import {AppointmentContext} from "../Context";
 import "firebase/compat/auth";
 import {appointmentsCollectionRef} from "../config/firebaseConfig";
 import {getDocs, deleteDoc,doc} from "firebase/firestore";
+import RescheduleModal from '../components/RescheduleModal';
+import {useNavigate} from  "react-router"
 
 
 
@@ -16,6 +18,8 @@ function Home() {
 
     const {date,setDate,setUserUid, uid, currentEmail,setCurrentEmail,appointments,setAppointments} = useContext(AppointmentContext);
     const [modalOpen, setModalOpen] = useState(false);
+    const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         const getAppointments = async () => {
@@ -68,7 +72,14 @@ function Home() {
                 <Calendar className=' bg-red-400'
                     onChange={onChange}
                     value={date}
-                    onClickDay = {()=>{ setModalOpen(true);}}
+                    onClickDay = {()=>{ 
+                        if(uid){
+                            setModalOpen(true);
+
+                        }else {
+                            navigate('/login')
+                        }
+                       }}
                     
                 />
       
@@ -82,16 +93,53 @@ function Home() {
                         if(currentEmail == appointment.currentEmail){
                           return  (
                               <>
-                              <div className="flex justify-between mx-5 bg-gray-300 mb-4 p-3 rounded-xl ">
+                              <div class="flex flex-col container max-w-md mt-10 mx-auto w-full items-center justify-center bg-white  rounded-lg shadow">
+                                            <ul class="flex flex-col divide-y w-full">
+                                                <li class="flex flex-row">
+                                                <div class="select-none cursor-pointer hover:bg-gray-50 flex flex-1 items-center p-4">
+                                                    <div class="flex-1 pl-1 mr-16">
+                                                    <div class="font-medium dark:text-white">{appointment.name}</div>
+                                                    <div class="text-gray-600 dark:text-gray-200 text-sm mb-3">{appointment.scheduledDate}</div>
+                                                    <div class="text-gray-600 dark:text-gray-200 text-sm">{appointment.note}</div>
+                                                    </div>
+                                                    {rescheduleModalOpen && <RescheduleModal 
+                                                        scheduledDate = {appointment.scheduledDate}
+                                                        id={appointment.id} 
+                                                        setRescheduleModalOpen={ setRescheduleModalOpen} />}
+
+                                                    <div class="text-gray-600 dark:text-gray-200 text-xs">
+                                                        <button onClick = {()=>{ setRescheduleModalOpen(true);}}>
+                                                            <img alt="edit" src="https://img.icons8.com/material-two-tone/24/000000/rescheduling-a-task.png"/>
+                                                        </button>
+
+                                                        <button onClick={()=>
+                                                            cancelAppointment(appointment.id) } >
+                                                            <img alt="delete" src="https://img.icons8.com/material-outlined/24/000000/cancel--v1.png"/>
+                                                        </button>
+                                    </div>
+                                                </div>
+                                                </li>
+
+                                                
+                                            </ul>
+                                            
+                                </div>
+                              {/* <div className="flex justify-between mx-5 bg-gray-300 mb-4 p-3 rounded-xl ">
                                     <div>
+                                    
                                         <h2 className="font-bold text-xl">{appointment.name}</h2>
                                         <span className="block font-bold  text-sm">{appointment.scheduledDate}</span>
                                         <span className="block  text-sm">{appointment.note}</span>
                                         
                                     </div>
+                                    {rescheduleModalOpen && <RescheduleModal 
+                                    scheduledDate = {appointment.scheduledDate}
+                                    id={appointment.id} 
+                                    setRescheduleModalOpen={ setRescheduleModalOpen} />}
                                     
                                     <div className="flex">
-                                    <button >
+                                   
+                                    <button onClick = {()=>{ setRescheduleModalOpen(true);}}>
                                     <img alt="edit" src="https://img.icons8.com/material-two-tone/48/000000/rescheduling-a-task.png"/>
                                     </button>
 
@@ -101,16 +149,10 @@ function Home() {
                                     <img alt="delete" src="https://img.icons8.com/material-outlined/48/000000/cancel--v1.png"/>
                                     </button>
                                     </div>
-                                    </div>
-                                </>
+                                    </div>*/}
+                                </> 
                     )
                         }
-                            
-
-                        
-                            
-
-                        
                
                
                     })}

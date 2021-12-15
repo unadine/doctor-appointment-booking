@@ -1,13 +1,12 @@
-import React,{useContext, useEffect, useState} from 'react';
-import {appointmentsCollectionRef} from "../config/firebaseConfig";
+import React,{useContext} from 'react';
 import {AppointmentContext} from "../Context";
-import {getDocs} from "firebase/firestore";
 import Card from '../Card';
-import Calendar from 'react-calendar';
+import MainContent from '../components/MainContent';
+
 
 const Dashboard = () => {
    
-    const {appointments,setAppointments} = useContext(AppointmentContext);
+    const {appointments} = useContext(AppointmentContext);
 
    
     return (
@@ -17,7 +16,7 @@ const Dashboard = () => {
                <Card 
                    key = {appointment.id}
                    appointment={appointment}
-                //    scheduledDate={appointment.scheduledDate}
+                   scheduledDate={appointment.scheduledDate}
                    name ={appointment.name}
                    currentEmail ={appointment.currentEmail}
                    note = {appointment.note}

@@ -28,6 +28,7 @@ function Modal({ setOpenModal }) {
             note: note,  
         })
         formRef.current.reset();
+        setOpenModal(false);
     }
 
   return (
