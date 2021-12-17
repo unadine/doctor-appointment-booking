@@ -13,6 +13,7 @@
 
 - Getting data for the currently logged in user
 - Styling the react-calendar
+- Deployment
 
 # Setup/Installation
 
