@@ -14,24 +14,43 @@ function Header() {
         textDecoration: "none",
         color: "#fbb6ce"
       };
+
+      const titleStyle = {
+        margin: "0px 20px",
+        textDecoration: "none",
+        color: "#fbb6ce"
+      };
+
+    
+    
     return (
         <>
         <header className='shadow-lg '>
-        <nav className="bg-green-700 py-2 text-center justify-between">
+        <nav className="bg-green-700 py-2 text-center justify-between py-10">
             <Link to="/" style={navStyle}>
                 HOME
             </Link>
-            <Link to="/login" style={navStyle}>
+            
+            { !uid && [
+                <>
+                <Link to="/login" style={navStyle}>
                 LOGIN 
             </Link>
             <Link to="/register" style={navStyle}>
                 REGISTER
             </Link>
+            </>
+               
+
+             ] }
+           
 
             { uid && [
-                <button style={navStyle} onClick={() => {
+                <button style={titleStyle} onClick={() => {
                         signOut(auth).then(() => {
+                        
                         navigate('/login');
+                        window.location.reload(false);
     
                         }).catch((error) => {
                             console.log(error)
@@ -41,8 +60,8 @@ function Header() {
                 </button>
 
              ] }
-             { currentEmail == "admin@admin.com" && [
-                <button style={navStyle} onClick={() => { navigate("/dashboard")
+             { currentEmail === "admin@admin.com" && [
+                <button style={titleStyle} onClick={() => { navigate("/dashboard")
                     }}>
                     ADMIN
                 </button>

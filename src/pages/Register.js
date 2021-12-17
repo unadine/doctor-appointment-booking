@@ -48,7 +48,7 @@ const Register = () => {
 
             }
             else{
-                const user = await createUserWithEmailAndPassword(
+                 await createUserWithEmailAndPassword(
                     auth,
                     email,
                     password

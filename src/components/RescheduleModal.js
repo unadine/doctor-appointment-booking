@@ -1,26 +1,25 @@
-import React,{useRef, useContext, useEffect} from "react";
+import React,{useRef} from "react";
+import moment from "moment";
 import "./Modal.css";
-import {appointmentsCollectionRef,db} from "../config/firebaseConfig";
+import {db} from "../config/firebaseConfig";
 import {updateDoc,doc} from "firebase/firestore";
-import {AppointmentContext} from "../Context";
 
 
-const RescheduleModal = ({  setRescheduleModalOpen,id,scheduledDate }) => {
+const RescheduleModal = ({  setRescheduleModalOpen,id}) => {
 
-
- 
     const rescheduleRef = useRef();
     const formRef = useRef();
 
 
     const handleReschedule = async(e) =>{
       e.preventDefault();
-      const rescheduledDate = rescheduleRef.current.value;
-          const appointmentsDoc = doc(db,"appointments",id);
-          const newDate = {scheduledDate: rescheduledDate}
-          await updateDoc(appointmentsDoc,newDate )
-          formRef.current.reset();
-          setRescheduleModalOpen(false);
+      const rescheduledDate = moment(rescheduleRef.current.value).format('MM/DD/YYYY');
+      const appointmentsDoc = doc(db,"appointments",id);
+      const newDate = {scheduledDate: rescheduledDate}
+      await updateDoc(appointmentsDoc,newDate )
+      formRef.current.reset();
+         
+      setRescheduleModalOpen(false);
         }
 
         

@@ -11,7 +11,7 @@ import {AppointmentContext} from "../Context";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { currentEmail, uid} = useContext(AppointmentContext);
+    const { uid} = useContext(AppointmentContext);
 
     useEffect(()=>{
         console.log(uid)
@@ -37,7 +37,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const user = await signInWithEmailAndPassword(
+            await signInWithEmailAndPassword(
                 auth,
                 loginEmail,
                 loginPassword
@@ -45,13 +45,10 @@ const Login = () => {
 
                 toast("Successfully Login");
                 navigate("/");
-
-            
-     
-
         } catch(e){
             console.log(e)
             toast(e.message);
+           
         }
 
         setloginEmail("");
@@ -65,8 +62,8 @@ const Login = () => {
         <MainContent 
         content={
             <div className="px-16 py-6 bg-gray-100 md:col-span-1">
-        <ToastContainer/>
               <div className="one w-full max-w-md">
+              <ToastContainer/>
                    <form className=" px-8 pt-6 pb-8 mb-4" onSubmit={signin}>
                          <div className="mb-4">
                          <label className="block text-gray-700 text-sm font-bold mb-2" >

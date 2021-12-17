@@ -28,18 +28,22 @@ function Home() {
 
         }
         getAppointments();
-    },[])
+    },[appointments])
 
     useEffect(()=>{
         onAuthStateChanged(auth, user => {
             if(user){
                 setCurrentEmail(user.email);  
                 setUserUid(user.uid)
-                console.log("Currently logged in user", user.email)
             }
-        },[])
+        },[uid])
         return uid;
     })
+
+    const handleOpenModal =()=>{
+        setRescheduleModalOpen(true)
+        
+    }
 
   
     
@@ -54,6 +58,7 @@ function Home() {
 
         await deleteDoc(appointment);
 
+
     }
 
    
@@ -64,19 +69,23 @@ function Home() {
         content={
             <>
             <h1 className='block text-gray-700 text-xl font-bold mb-2 text-center'>Home page </h1>
-            <div className='grid md:grid-cols-2 my-16 mx-16'>
+            <div className='grid md:grid-cols-3 my-16 mx-16'>
                 <div className='md:col-span-1'>
                 {modalOpen && <Modal setOpenModal={setModalOpen} />}
 
             <div >
-                <Calendar className=' bg-red-400'
+                <Calendar  
                     onChange={onChange}
                     value={date}
                     onClickDay = {()=>{ 
                         if(uid){
                             setModalOpen(true);
 
-                        }else {
+                        
+                        }else if(currentEmail === "admin@admin.com"){
+                            setModalOpen(false);
+                        }
+                        else {
                             navigate('/login')
                         }
                        }}
@@ -87,10 +96,10 @@ function Home() {
              </div>
 
                 </div>
-                <div className='md:col-span-1'>
+                <div className='md:col-span-2'>
                     <h1 className='block text-gray-700 text-xl font-bold mb-2 text-center'>Your scheduled Appointments</h1>
                     {appointments.map((appointment) => {
-                        if(currentEmail == appointment.currentEmail){
+                        if(currentEmail === appointment.currentEmail){
                           return  (
                               <>
                               <div class="flex flex-col container max-w-md mt-10 mx-auto w-full items-center justify-center bg-white  rounded-lg shadow">
@@ -108,7 +117,8 @@ function Home() {
                                                         setRescheduleModalOpen={ setRescheduleModalOpen} />}
 
                                                     <div class="text-gray-600 dark:text-gray-200 text-xs">
-                                                        <button onClick = {()=>{ setRescheduleModalOpen(true);}}>
+                                                        <button onClick = {
+                                                            handleOpenModal }>
                                                             <img alt="edit" src="https://img.icons8.com/material-two-tone/24/000000/rescheduling-a-task.png"/>
                                                         </button>
 
@@ -124,32 +134,7 @@ function Home() {
                                             </ul>
                                             
                                 </div>
-                              {/* <div className="flex justify-between mx-5 bg-gray-300 mb-4 p-3 rounded-xl ">
-                                    <div>
-                                    
-                                        <h2 className="font-bold text-xl">{appointment.name}</h2>
-                                        <span className="block font-bold  text-sm">{appointment.scheduledDate}</span>
-                                        <span className="block  text-sm">{appointment.note}</span>
-                                        
-                                    </div>
-                                    {rescheduleModalOpen && <RescheduleModal 
-                                    scheduledDate = {appointment.scheduledDate}
-                                    id={appointment.id} 
-                                    setRescheduleModalOpen={ setRescheduleModalOpen} />}
-                                    
-                                    <div className="flex">
-                                   
-                                    <button onClick = {()=>{ setRescheduleModalOpen(true);}}>
-                                    <img alt="edit" src="https://img.icons8.com/material-two-tone/48/000000/rescheduling-a-task.png"/>
-                                    </button>
-
-                                    <button onClick={()=>
-                                        cancelAppointment(appointment.id)
-                                        } >
-                                    <img alt="delete" src="https://img.icons8.com/material-outlined/48/000000/cancel--v1.png"/>
-                                    </button>
-                                    </div>
-                                    </div>*/}
+                              
                                 </> 
                     )
                         }

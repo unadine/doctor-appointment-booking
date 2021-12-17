@@ -1,4 +1,4 @@
-import React,{useRef, useContext, useEffect} from "react";
+import React,{useRef, useContext} from "react";
 import "./Modal.css";
 import {appointmentsCollectionRef} from "../config/firebaseConfig";
 import {addDoc} from "firebase/firestore";

@@ -10,6 +10,8 @@ const Dashboard = () => {
 
    
     return (
+        <MainContent 
+        content={
         <div>
            {appointments.map((appointment) => (
                
@@ -24,6 +26,8 @@ const Dashboard = () => {
                ))}
             
         </div>
+        }
+        />
     )
 }
 
